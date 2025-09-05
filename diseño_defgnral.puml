@@ -1,0 +1,101 @@
+@startuml
+class Usuario {
+  -id: UUID
+  +nombre: String
+  +email: String
+  -contraseña: String
+  +tipo: Enum <<colaborador|externo>>
+  +codigoEmpleado: String?
+  +emailConfirmado: Boolean
+}
+
+class Recursos_Humanos{
+  -reportesGenerados: Int
+  -ultimaRevision: DateTime
+  -areaResponsable: String
+}
+
+class Trabajador{
+  -departamento: String
+  -puesto: String
+  -horasAcumuladas: Float
+}
+
+class Equipo_Operativo{
+  -areaResponsable: String
+  -inventarioAsignado: String[]
+  -telefonoContacto: String
+}
+
+class Admin{
+  -ultimaConexion: DateTime
+  -permisosEspeciales: String[]
+  
+}
+
+class Actividad {
+  -id: UUID
+  +titulo: String
+  +id_sede: String
+  +fecha: Date
+  +horario: String
+  +responsable: String
+  -cupo: Int
+  +claveTurno: String
+  +semestre: String
+  +activa: Boolean
+}
+
+class Sede{
+  -id: UUID
+  +nombre: String
+  +municipio: String
+  +direccion: String
+}
+
+class Inscripcion {
+  -id: UUID
+  +estado: Enum <<inscrito|asistio|no_asistio|cancelado>>
+  +horas: Float
+  -fechaRegistro: DateTime
+}
+
+class Inventario{
+  -id: UUID
+  +nombre: String
+  +descripcion: String
+  +cantidadDisponible: Int
+}
+
+class MaterialAsignado {
+  -id: UUID
+  +articulo: String
+  +estado: Enum <<entregado|devuelto|pendiente>>
+  -fechaEntrega: DateTime
+  -fechaDevolucion: DateTime?
+  -asignarMaterial()
+}
+
+class ValidacionRH {
+  -id: UUID
+  +semestre: String
+  -horasTotales: Float
+  +fechaCierre: DateTime
+}
+
+Usuario "1" -down- "0..*" Inscripcion
+Actividad "1" -down- "0..*" Inscripcion
+Trabajador "0..*" -- "0..*" Actividad : participa >
+Trabajador "1" -up- "0..*" MaterialAsignado
+Recursos_Humanos "1" -down- "0..*" ValidacionRH
+Sede "1" -left- "0..*" Actividad
+Inventario -down- "0..*" MaterialAsignado
+Equipo_Operativo "1" -right- "0..*" MaterialAsignado
+
+Usuario <|-- Recursos_Humanos
+Usuario <|-- Trabajador 
+Usuario <|-- Equipo_Operativo
+Usuario <|-up- Admin
+
+@enduml
+

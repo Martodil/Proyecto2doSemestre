@@ -1,0 +1,38 @@
+@startuml 
+left to right direction
+
+rectangle Catalogo_de_actividades{
+    (Gestiona actividades comunitarias) 
+    (Gestiona usuarios) 
+    (Gestiona inscripciones) 
+    (Gestiona materiales asignados) 
+    (Genera consolidaciones RH)
+    (Inscribirse a actividad)
+    (Ver actividades disponibles)
+    (Registrarse)
+}
+
+
+actor Admin 
+Admin --> (Gestiona actividades comunitarias) 
+Admin --> (Gestiona usuarios) 
+Admin --> (Gestiona inscripciones)
+
+actor Equipo_Operativo
+Equipo_Operativo --> (Gestiona materiales asignados)
+
+actor Trabajador <<Colaborador_interno>>
+Trabajador --> (Inscribirse a actividad)
+
+actor Recursos_Humanos
+Recursos_Humanos --> (Genera consolidaciones RH)
+
+actor Usuario_no_registrado
+Usuario_no_registrado --> (Ver actividades disponibles)
+
+Actor Usuario
+Usuario --> (Registrarse)
+Usuario --|> Admin
+Usuario --|> Equipo_Operativo
+Usuario --|> Trabajador
+Usuario --|> Recursos_Humanos
