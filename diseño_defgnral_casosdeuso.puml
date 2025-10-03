@@ -6,32 +6,38 @@ rectangle Catalogo_de_actividades{
     (Gestiona usuarios) 
     (Gestiona inscripciones) 
     (Gestiona materiales asignados) 
-    (Genera consolidaciones RH)
+    (Verificar horas RH)
     (Inscribirse a actividad)
     (Ver actividades disponibles)
     (Registrarse)
+    (Prestar material)
 }
 
-
 actor Admin 
-Admin --> (Gestiona actividades comunitarias) 
-Admin --> (Gestiona usuarios) 
-Admin --> (Gestiona inscripciones)
+Admin "1..*" --> "1..*" (Gestiona actividades comunitarias) 
+Admin "1..*" --> "1..*" (Gestiona usuarios) 
+Admin "1..*" --> "1..*" (Gestiona inscripciones)
 
 actor Equipo_Operativo
-Equipo_Operativo --> (Gestiona materiales asignados)
+Equipo_Operativo "1..*" --> "1..*" (Gestiona materiales asignados)
+Equipo_Operativo "1..*" --> "1..*" (Prestar material)
 
 actor Trabajador <<Colaborador_interno>>
-Trabajador --> (Inscribirse a actividad)
+Trabajador "1..*" --> "1..*" (Inscribirse a actividad)
+Trabajador "1..*" --> "1..*" (Ver actividades disponibles)
 
 actor Recursos_Humanos
-Recursos_Humanos --> (Genera consolidaciones RH)
+Recursos_Humanos "1..*" --> "1..*" (Verificar horas RH)
 
 actor Usuario_no_registrado
-Usuario_no_registrado --> (Ver actividades disponibles)
+Usuario_no_registrado "1..*" --> "1..*" (Ver actividades disponibles)
 
 Actor Usuario
-Usuario --> (Registrarse)
+Usuario "1..1" --> "1..1" (Registrarse)
+
+(Verificar horas RH) <.. (Inscribirse a actividad) : include
+(Prestar material) <.. (Inscribirse a actividad) : include
+
 Usuario --|> Admin
 Usuario --|> Equipo_Operativo
 Usuario --|> Trabajador

@@ -7,12 +7,14 @@ class Usuario {
   +tipo: Enum <<colaborador|externo>>
   +codigoEmpleado: String?
   +emailConfirmado: Boolean
+  +verHorasTrabajadas():Float
 }
 
 class Recursos_Humanos{
   -reportesGenerados: Int
   -ultimaRevision: DateTime
   -areaResponsable: String
+  +verHorasTrabajadas():Float
 }
 
 class Trabajador{
@@ -95,7 +97,7 @@ Equipo_Operativo "1" -right- "0..*" MaterialAsignado
 Usuario <|-- Recursos_Humanos
 Usuario <|-- Trabajador 
 Usuario <|-- Equipo_Operativo
-Usuario <|-up- Admin
+Usuario <|-left- Admin
 
 @enduml
 
