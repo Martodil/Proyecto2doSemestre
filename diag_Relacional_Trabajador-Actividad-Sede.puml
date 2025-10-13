@@ -1,15 +1,31 @@
 @startuml
-'https://plantuml.com/sequence-diagram
+title Trabajador consulta y participa en Actividad con Sede
+hide footbox
+skinparam monochrome true
+skinparam shadowing false
 
-autonumber
+actor "Trabajador" as TRA
+participant "Actividad" as ACT
+participant "Sede" as SED
 
-== Initialization ==
+TRA -> ACT : Consultar actividades disponibles
+activate ACT
+ACT -> SED : Obtener datos de sede
+activate SED
+SED --> ACT : Datos de sede
+deactivate SED
+ACT --> TRA : Lista de actividades y sedes
+deactivate ACT
 
-Alice -> Bob: Authentication Request
-Bob --> Alice: Authentication Response
+TRA -> ACT : Seleccionar actividad
+activate ACT
+ACT -> ACT : Verificar cupo
 
-== Repetition ==
-
-Alice -> Bob: Another authentication Request
-Alice <-- Bob: another authentication Response
+alt Cupo disponible
+  ACT -> ACT : Registrar participación de trabajador
+  ACT --> TRA : Confirmación de participación
+else Cupo lleno
+  ACT --> TRA : Rechazo por falta de cupo
+end
+deactivate ACT
 @enduml
