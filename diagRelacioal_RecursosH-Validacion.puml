@@ -1,0 +1,27 @@
+@startuml
+title Relación Recursos Humanos ↔ Validación
+hide footbox
+skinparam monochrome true
+skinparam shadowing false
+
+actor "Recursos_Humanos" as RH
+participant "Validación" as VAL
+
+RH -> VAL : Solicitar generación de validación
+VAL --> RH : Acuse de recibo
+VAL -> RH : Solicitar verificación de datos
+RH -> VAL : Enviar información
+
+activate VAL
+VAL -> VAL : Registrar validación
+
+alt "Datos correctos"
+  VAL --> RH : Confirmación de validación
+else "Datos incorrectos"
+  VAL --> RH : Mensaje de datos inválidos
+end
+
+deactivate VAL
+@enduml
+
+
