@@ -1,15 +1,28 @@
 @startuml
-'https://plantuml.com/sequence-diagram
+title Trabajador solicita y recibe material desde Inventario
+hide footbox
+skinparam monochrome true
+skinparam shadowing false
 
-autonumber
+actor "Trabajador" as TRA
+participant "Material_Asignado" as MA
+participant "Inventario" as INV
 
-== Initialization ==
+TRA -> MA : Solicitar material(artículo,cantidad)
+activate MA
+MA -> INV : Verificar disponibilidad(artículo,cantidad)
+activate INV
 
-Alice -> Bob: Authentication Request
-Bob --> Alice: Authentication Response
+alt Disponible
+  INV --> MA : Disponible
+  MA -> INV : Descontar unidades(artículo,cantidad)
+  INV --> MA : Stock actualizado
+  MA --> TRA : Asignación registrada(artículo,cantidad,estado=entregado)
+else No disponible
+  INV --> MA : No disponible
+  MA --> TRA : Solicitud rechazada
+end
 
-== Repetition ==
-
-Alice -> Bob: Another authentication Request
-Alice <-- Bob: another authentication Response
+deactivate INV
+deactivate MA
 @enduml
