@@ -1,15 +1,34 @@
 @startuml
-'https://plantuml.com/sequence-diagram
+title Diagrama de comunicación: Inscribirse a actividad
+skinparam shadowing false
 
-autonumber
+actor Trabajador
+participant "UI/Catálogo" as UI
+participant "ServicioActividades" as SAct
+participant "RepoActividad" as RAct
+participant "ServicioInscripciones" as SIns
+participant "RepoInscripcion" as RIns
+participant "ServicioRH" as SRH
+participant "ValidacionRH" as VRH
 
-== Initialization ==
+Trabajador -> UI : 1: verActividades()
+UI -> SAct : 1.1: obtenerDisponibles()
+SAct -> RAct : 1.1.1: listarDisponibles()
+RAct --> SAct : 1.1.2: lista
+SAct --> UI : 1.2: actividades
 
-Alice -> Bob: Authentication Request
-Bob --> Alice: Authentication Response
+Trabajador -> UI : 2: inscribirse(idActividad)
+UI -> SIns : 2.1: crearInscripcion(idActividad, trabajador)
+SIns -> RAct : 2.1.1: verificarCupo(idActividad)
+RAct --> SIns : 2.1.2: cupoOK
+SIns -> RIns : 2.2: guardarInscripcion()
+RIns --> SIns : 2.3: idInscripcion
 
-== Repetition ==
+SIns -> SRH : 2.4: registrarHorasPreliminares(trabajador, idActividad)
+SRH -> VRH : 2.4.1: consolidarHoras(trabajador)
+VRH --> SRH : 2.4.2: consolidacionOK
+SRH --> SIns : 2.5: horasRegistradas
 
-Alice -> Bob: Another authentication Request
-Alice <-- Bob: another authentication Response
+SIns --> UI : 3: comprobanteInscripcion(idInscripcion)
+UI --> Trabajador : 3.1: mostrarComprobante
 @enduml
