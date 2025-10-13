@@ -1,15 +1,38 @@
 @startuml
-'https://plantuml.com/sequence-diagram
+title Relación Equipo_Operativo ↔ Material_Asignado ↔ Inventario ↔ Trabajador
+hide footbox
+skinparam monochrome true
+skinparam shadowing false
 
-autonumber
+actor "Equipo_Operativo" as EO
+participant "Material_Asignado" as MA
+participant "Inventario" as INV
+participant "Trabajador" as TRA
 
-== Initialization ==
 
-Alice -> Bob: Authentication Request
-Bob --> Alice: Authentication Response
+EO -> MA : Consultar materiales asignados a trabajadores
+activate MA
+MA -> TRA : Obtener lista de trabajadores con material asignado
+TRA --> MA : Datos de trabajadores(asignaciones)
+MA -> INV : Consultar detalles de los artículos
+activate INV
+INV --> MA : Detalles de artículos(nombre, cantidadDisponible)
+deactivate INV
+MA --> EO : Reporte completo\n[trabajador, artículo, estado, fechaEntrega, fechaDevolución]
+deactivate MA
 
-== Repetition ==
 
-Alice -> Bob: Another authentication Request
-Alice <-- Bob: another authentication Response
+opt "Filtrar por estado"
+  EO -> MA : Consultar asignaciones(estado=pendiente|entregado|devuelto)
+  MA --> EO : Lista filtrada
+end
+
+
+opt "Detalle de trabajador"
+  EO -> MA : Ver detalle(trabajadorId)
+  MA -> INV : Consultar inventario(artículos asignados)
+  INV --> MA : Datos de inventario
+  MA --> EO : Detalle del trabajador y sus materiales
+end
 @enduml
+
