@@ -1,0 +1,67 @@
+@startuml 
+left to right direction
+
+rectangle Catalogo_de_actividades{
+    (Gestiona actividades comunitarias) 
+    'Gestiona las actividades comunitarias, 
+    'incluyendo la creación, edición y eliminación de actividades.
+    (Gestiona usuarios) 
+    'Gestiona los usuarios del sistema, 
+    'incluyendo la creación, edición y eliminación de perfiles de usuario.
+    (Gestiona inscripciones) 
+    'Gestiona las inscripciones de los usuarios a las actividades comunitarias, 
+    'incluyendo la aprobación o rechazo de inscripciones.
+    (Gestiona materiales asignados) 
+    'Gestiona los materiales asignados a las actividades comunitarias, 
+    'incluyendo la asignación y devolución de materiales.
+    (Verificar horas RH)
+    'Verifica las horas trabajadas por los empleados de recursos humanos
+    'para asegurar que cumplen con los requisitos de participación en actividades comunitarias.
+    (Inscribirse a actividad)
+    'Permite a los usuarios inscribirse en actividades comunitarias,
+    'verificando su elegibilidad y disponibilidad.
+    (Ver actividades disponibles)
+    'Permite a los usuarios ver las actividades comunitarias disponibles
+    'y sus detalles, como fechas, horarios y requisitos.
+    (Registrarse)
+    'Permite a los usuarios registrarse en el sistema,
+    'creando un perfil de usuario con información personal y de contacto.
+    (Prestar material)
+    'Permite a los usuarios del equipo operativo prestar materiales
+    'necesarios para las actividades comunitarias.
+    (Verificar Disponibilidad de horario)
+    'Verifica la disponibilidad de horario del usuario
+    'antes de permitir la inscripción en una actividad.
+}
+
+actor Admin 
+Admin "1..*" --> "1..*" (Gestiona actividades comunitarias) 
+Admin "1..*" --> "1..*" (Gestiona usuarios) 
+Admin "1..*" --> "1..*" (Gestiona inscripciones)
+
+actor Equipo_Operativo
+Equipo_Operativo "1..*" --> "1..*" (Gestiona materiales asignados)
+Equipo_Operativo "1..*" --> "1..*" (Prestar material)
+
+actor Trabajador <<Colaborador_interno>>
+Trabajador "1..*" --> "1..*" (Inscribirse a actividad)
+Trabajador "1..*" --> "1..*" (Ver actividades disponibles)
+
+actor Recursos_Humanos
+Recursos_Humanos "1..*" --> "1..*" (Verificar horas RH)
+
+actor Usuario_no_registrado
+Usuario_no_registrado "1..*" --> "1..*" (Ver actividades disponibles)
+
+Actor Usuario
+Usuario "1..1" --> "1..1" (Registrarse)
+
+(Verificar horas RH) <.. (Inscribirse a actividad) : include
+(Prestar material) <.. (Inscribirse a actividad) : include
+(Verificar Disponibilidad de horario) <.down. (Inscribirse a actividad) : extends
+
+
+Usuario --|> Admin
+Usuario --|> Equipo_Operativo
+Usuario --|> Trabajador
+Usuario --|> Recursos_Humanos

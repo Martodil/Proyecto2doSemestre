@@ -4,10 +4,12 @@ class Usuario {
   +nombre: String
   +email: String
   -contraseña: String
-  +tipo: Enum <<colaborador|externo>>
-  +codigoEmpleado: String?
+  +tipo: String
+  +codigoEmpleado: Integer
   +emailConfirmado: Boolean
-  +verHorasTrabajadas():Float
+  +registrarse()
+  +iniciarSesion()
+  #actualizarPerfil()
 }
 
 class Recursos_Humanos{
@@ -15,24 +17,42 @@ class Recursos_Humanos{
   -ultimaRevision: DateTime
   -areaResponsable: String
   +verHorasTrabajadas():Float
+  +iniciarValidacionHoras()
+  +generarReporte()
 }
 
 class Trabajador{
   -departamento: String
   -puesto: String
   -horasAcumuladas: Float
+  +inscribirseActividad()
+  +cancelarInscripcion()
+  +verActividadesDisponibles()
+  +verHorasTrabajadas()
+  +tomarPrestadoMaterial()
+  +devolverMaterial()
 }
 
 class Equipo_Operativo{
   -areaResponsable: String
   -inventarioAsignado: String[]
   -telefonoContacto: String
+  +prestarMaterial()
+  +devolverMaterial()
 }
 
 class Admin{
   -ultimaConexion: DateTime
   -permisosEspeciales: String[]
-  
+  -crearUsuario()
+  -eliminarUsuario()
+  -modificarUsuario()
+  -crearActividad()
+  -eliminarActividad()
+  -modificarActividad()
+  -generarReporte()
+  -gestionarInscripciones()
+  -gestionarMateriales()
 }
 
 class Actividad {
@@ -46,6 +66,14 @@ class Actividad {
   +claveTurno: String
   +semestre: String
   +activa: Boolean
+  +crearActividad()
+  +editarActividad()
+  +eliminarActividad()
+  +consultarDetalles()
+  +verificarDisponibilidadHorario()
+  +asignarMaterial()
+  +registrarInscripcion()
+  +cancelarInscripcion()
 }
 
 class Sede{
@@ -53,13 +81,18 @@ class Sede{
   +nombre: String
   +municipio: String
   +direccion: String
+  +registrarSede()
+  +actualizarDatos()
+  +eliminarSede()
 }
 
 class Inscripcion {
   -id: UUID
-  +estado: Enum <<inscrito|asistio|no_asistio|cancelado>>
+  +estado: String
   +horas: Float
   -fechaRegistro: DateTime
+  +registrarInscripcion()
+  +cancelarInscripcion()
 }
 
 class Inventario{
@@ -67,15 +100,19 @@ class Inventario{
   +nombre: String
   +descripcion: String
   +cantidadDisponible: Int
+  +agregarMaterial()
+  +removerMaterial()
+  +actualizarCantidadDisponible()
 }
 
 class MaterialAsignado {
   -id: UUID
   +articulo: String
-  +estado: Enum <<entregado|devuelto|pendiente>>
+  +estado: String
   -fechaEntrega: DateTime
-  -fechaDevolucion: DateTime?
+  -fechaDevolucion: DateTime
   -asignarMaterial()
+  -devolverMaterial()
 }
 
 class ValidacionRH {
@@ -83,21 +120,25 @@ class ValidacionRH {
   +semestre: String
   -horasTotales: Float
   +fechaCierre: DateTime
+  +validarHoras()
 }
 
-Usuario "1" -down- "0..*" Inscripcion
-Actividad "1" -down- "0..*" Inscripcion
+Usuario "1" -- "0..*" Inscripcion
+Actividad "1" -right- "0..*" Inscripcion
 Trabajador "0..*" -- "0..*" Actividad : participa >
-Trabajador "1" -up- "0..*" MaterialAsignado
-Recursos_Humanos "1" -down- "0..*" ValidacionRH
-Sede "1" -left- "0..*" Actividad
-Inventario -down- "0..*" MaterialAsignado
-Equipo_Operativo "1" -right- "0..*" MaterialAsignado
+Trabajador "1" -- "0..*" MaterialAsignado
+Recursos_Humanos "1" -- "0..*" ValidacionRH
+Sede "1" -- "0..*" Actividad
+Inventario -- "0..*" MaterialAsignado
+Equipo_Operativo "1" -- "0..*" MaterialAsignado
+ValidacionRH "1" -- "0..*" Actividad
+
 
 Usuario <|-- Recursos_Humanos
 Usuario <|-- Trabajador 
 Usuario <|-- Equipo_Operativo
 Usuario <|-left- Admin
+
 
 @enduml
 

@@ -1,0 +1,15 @@
+@startuml
+
+Trabajador -> Equipo_Operativo: Solicita material asignado
+activate Trabajador
+Equipo_Operativo -> Equipo_Operativo: Verifica inventario
+alt Material disponible
+    Equipo_Operativo -> Trabajador: Entrega material
+    deactivate Trabajador
+else Material no disponible
+    Equipo_Operativo -> Trabajador: Notifica indisponibilidad
+    deactivate Trabajador
+end
+
+
+@enduml

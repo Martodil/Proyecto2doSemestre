@@ -1,0 +1,20 @@
+@startuml
+actor Trabajador as usuario
+participant Actividad
+participant Inscripcion
+
+usuario -> Actividad: Solicita ver actividades disponibles
+activate usuario
+Actividad -> usuario: Muestra lista de actividades
+usuario -> Actividad: Selecciona actividad para inscribirse
+Actividad -> usuario: Muestra detalles de la actividad
+alt Actividad disponible
+    Actividad -> Inscripcion: Verificar disponibilidad de horario
+    Inscripcion -> Actividad: Confirma disponibilidad
+    Actividad -> Inscripcion: Registrar inscripción
+    Inscripcion -> usuario: Confirmación de inscripción
+else Actividad no disponible
+    Actividad -> usuario: Muestra mensaje de no disponibilidad
+end
+
+@enduml

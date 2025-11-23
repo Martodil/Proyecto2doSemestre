@@ -1,0 +1,15 @@
+@startuml
+actor usuario 
+participant Registro
+
+usuario -> Registro: Solicita registro
+Registro -> usuario: Formulario de registro
+usuario -> Registro: Envía formulario
+Registro -> Registro: Valida datos
+alt Datos válidos
+    Registro -> usuario: Confirmación de registro
+else Datos inválidos
+    Registro -> usuario: Mensaje de error
+end
+
+@enduml

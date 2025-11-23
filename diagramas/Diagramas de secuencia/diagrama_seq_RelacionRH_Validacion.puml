@@ -1,0 +1,19 @@
+@startuml
+actor Recursos_Humanos
+participant ValidacionRH
+
+Recursos_Humanos -> ValidacionRH: Iniciar validación de horas
+ValidacionRH -> Recursos_Humanos: Verificar datos de actividades
+Recursos_Humanos -> ValidacionRH: Proporcionar datos necesarios
+
+alt Datos completos
+    ValidacionRH -> ValidacionRH: Calcular horas totales
+    Recursos_Humanos <- ValidacionRH: Confirmación de validación exitosa
+else Datos incompletos
+    ValidacionRH -> Recursos_Humanos: Solicitar datos faltantes
+    Recursos_Humanos -> ValidacionRH: Proporcionar datos faltantes
+    ValidacionRH -> ValidacionRH: Calcular horas totales
+        Recursos_Humanos <- ValidacionRH: Confirmación de validación exitosa
+end
+
+@enduml 
